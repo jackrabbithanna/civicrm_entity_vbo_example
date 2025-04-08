@@ -3,17 +3,15 @@
 namespace Drupal\civicrm_entity_vbo_example\Plugin\Action;
 
 use Drupal\civicrm_entity\CiviCrmApi;
+use Drupal\Core\Action\Attribute\Action;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginFormInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase;
 use Drupal\views_bulk_operations\Action\ViewsBulkOperationsPreconfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-
-if (!class_exists('Drupal\views_bulk_operations\Action\ViewsBulkOperationsActionBase')) {
-  return;
-}
 
 /**
  * Action to tag a CiviCRM Contact.
@@ -25,6 +23,11 @@ if (!class_exists('Drupal\views_bulk_operations\Action\ViewsBulkOperationsAction
  *   confirm = TRUE,
  * )
  */
+#[Action(
+  id: 'civicrm_contact_add_tag',
+  label: new TranslatableMarkup('Tag Contact'),
+  type: 'civicrm_contact',
+)]
 class CivicrmContactAddTag extends ViewsBulkOperationsActionBase implements ViewsBulkOperationsPreconfigurationInterface, PluginFormInterface, ContainerFactoryPluginInterface {
 
   /**
@@ -140,7 +143,7 @@ class CivicrmContactAddTag extends ViewsBulkOperationsActionBase implements View
   /**
    * {@inheritdoc}
    */
-  public function access($object, AccountInterface $account = NULL, $return_as_object = FALSE) {
+  public function access($object, ?AccountInterface $account = NULL, $return_as_object = FALSE) {
     return $object->access('update', $account, $return_as_object);
   }
 
